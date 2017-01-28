@@ -17,7 +17,7 @@ public class DataChart {
     StackPane window = new StackPane();
     Scene scene2 = new Scene(window,600, 600);
 
-        //graafiku joonistamisel oli abiks oracle...
+        //graafiku joonistamisel oli abiks: http://docs.oracle.com/javafx/2/charts/line-chart.htm
         public void drawChart(final Map<Integer, Double> selectedData){
         final NumberAxis xAxis = new NumberAxis(2004, 2016, 1);
         final NumberAxis yAxis = new NumberAxis();

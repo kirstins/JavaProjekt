@@ -41,7 +41,7 @@ public class Database {
             stat.executeUpdate(sql);
             stat.close();
 
-            //Andmete kättesaamiseks csv.failist oli abiks:
+            //Andmete kättesaamiseks csv.failist oli abiks: https://www.youtube.com/watch?v=BmxI9qK3tSo
 
             //Loon n-ö päringu plaani, väärtused sisestatakse sellesse hiljem PreparedStatement'i set meetodi abil.
             String query = "INSERT INTO PRICESANDTRANSACTIONS VALUES (?, ?, ?, ?, ?)";
@@ -132,7 +132,7 @@ public class Database {
     }
     return selectedData;}
 
-   
+
 
     public Map<Integer, Double> getSelectedData3 (String region3){
         Map<Integer, Double> selectedData = new HashMap<>();
