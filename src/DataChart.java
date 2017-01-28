@@ -10,16 +10,14 @@ import java.util.Map;
 /**
  * Created by kirstin
  */
-public class DataChart {
 
+public class DataChart {
+    // aknaga seonduv
     Stage stage = new Stage();
     StackPane window = new StackPane();
     Scene scene2 = new Scene(window,600, 600);
 
-    public DataChart() {
-        super();
-    }
-
+        //graafiku joonistamisel oli abiks oracle...
         public void drawChart(final Map<Integer, Double> selectedData){
         final NumberAxis xAxis = new NumberAxis(2004, 2016, 1);
         final NumberAxis yAxis = new NumberAxis();
@@ -31,7 +29,8 @@ public class DataChart {
 
             XYChart.Series series = new XYChart.Series();
             series.setName("Development in the real estate prices");
-
+            //vajalikud andmed graafiku joonistamiseks saadakse hashmapist
+            // graafikule kantakse kõik päritud aasta-hinnakasv paarid
             for (Map.Entry<Integer, Double> entry : selectedData.entrySet())  {
                 series.getData().add(new XYChart.Data(entry.getKey(), entry.getValue()));
                     System.out.println(entry.getKey());
@@ -56,6 +55,8 @@ public class DataChart {
         XYChart.Series series = new XYChart.Series();
         series.setName("Development in transactions volumes");
 
+        //vajalikud andmed graafiku joonistamiseks saadakse hashmapist
+        // graafikule kantakse kõik päritud aasta-tehingute maht paarid
         for (Map.Entry<Integer, Double> entry : selectedData.entrySet())  {
             series.getData().add(new XYChart.Data(entry.getKey(), entry.getValue()));
             System.out.println(entry.getKey());

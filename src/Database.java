@@ -1,10 +1,3 @@
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.layout.StackPane;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -41,26 +34,30 @@ public class Database {
     private void createTable() {
 
         try {
+            //Loon andmebaasi
             String sql = "CREATE TABLE IF NOT EXISTS PRICESANDTRANSACTIONS (ID INTEGER, YEAR INTEGER, " +
                     "REGION TEXT, PRICES NUMERIC, TRANSACTIONS NUMERIC);";
             Statement stat = conn.createStatement();
             stat.executeUpdate(sql);
             stat.close();
 
+            //Andmete kättesaamiseks csv.failist oli abiks:
+
+            //Loon n-ö päringu plaani, väärtused sisestatakse sellesse hiljem PreparedStatement'i set meetodi abil.
             String query = "INSERT INTO PRICESANDTRANSACTIONS VALUES (?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(query);
 
+            //Küsitakse andmed, mis lisatakse Arraylisti
             ArrayList<PricesAndTransactions> list = getDataFromCvsFile("pricesandtransactions.csv");
 
+            //Andmed saadakse kätte Arraylistist ja sisestatakse PreparedStatement'i set meetodi abil andmebaasi.
             for (int i=0; i < list.size(); i++) {
                 preparedStatement.setInt(1, list.get(i).getId());
                 preparedStatement.setInt(2, list.get(i).getYear());
                 preparedStatement.setString(3, list.get(i).getArea());
                 preparedStatement.setDouble(4, list.get(i).getPrices());
                 preparedStatement.setDouble(5, list.get(i).getTransactions());
-
-
                 preparedStatement.executeUpdate();
                 System.out.println("No problem occurred"+ (i+1));
 
@@ -69,26 +66,29 @@ public class Database {
         }
 
     }
+    // Andmete lugemine csv.failist
+    public static ArrayList<PricesAndTransactions> getDataFromCvsFile (String file) {
 
-    public static ArrayList<PricesAndTransactions> getDataFromCvsFile (String filePath) {
-
-        FileInputStream fis = null;
-        InputStreamReader isr = null;
+        FileInputStream fs = null;
+        InputStreamReader ir = null;
         BufferedReader bReader = null;
-        ArrayList <PricesAndTransactions> values = new ArrayList<PricesAndTransactions>();
+        ArrayList <PricesAndTransactions> values = new ArrayList <PricesAndTransactions>();
 
         try {
-            fis = new FileInputStream(filePath);
-            isr = new InputStreamReader(fis);
-            bReader = new BufferedReader(isr);
+            fs = new FileInputStream(file); //faili loetakse baitidel põhinevalt
+            ir = new InputStreamReader(fs); //baitidel põhinev sisend muudetakse karakteritel põhinevaks
+            bReader = new BufferedReader(ir); // loetakse faili
             String line = null;
             String []strPrices = null;
 
             while (true) {
                 line = bReader.readLine();
+                //kontrollime, kas real on sisu
                 if (line == null) {
+                    //kui sisu ei ole, lugemine lõpetatakse
                     break;
                 } else {
+                    //Lööb komadega eraldatud väärtused lahku ja lisab Arraylisti
                     strPrices = line.split(",");
                     values.add(new PricesAndTransactions(Integer.parseInt(strPrices[0]), Integer.parseInt(strPrices[1]), (strPrices[2]), Double.parseDouble(strPrices[3]), Double.parseDouble(strPrices[4])));
 
@@ -101,8 +101,8 @@ public class Database {
         }finally {
             try {
                 bReader.close();
-                isr.close();
-                fis.close();
+                ir.close();
+                fs.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -111,7 +111,7 @@ public class Database {
         return values;
     }
 
-
+    // Andmete päring ja päringu tulemuste lisamine hashmap'i
     public Map<Integer, Double> getSelectedData (String region){
         Map<Integer, Double> selectedData = new HashMap<>();
         try {
@@ -203,7 +203,7 @@ public class Database {
             e.printStackTrace();
             }
     }
-
+    //ühenduse sulgemine
     public void closeConnection() {
         try {
             conn.close();

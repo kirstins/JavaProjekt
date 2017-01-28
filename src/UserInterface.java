@@ -1,23 +1,18 @@
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by kirstin
  */
+
+//Konstruktor - määrab ära, mis juhtub kui objekt kä
 public class UserInterface {
     Stage layout =new Stage();
     Button button1;
@@ -26,11 +21,11 @@ public class UserInterface {
     String area;
     Map selectedData;
 
-
+    //Konstruktor - määrab ära, mis juhtub kui objekt käivitatakse
     public UserInterface() {
-    setStage();
-    Selection ();
-        reactOnClick1 ();
+    setStage();                 //Stage'iga seonduva loomine
+    Selection ();               // Kasutaja saab valida kahe regiooni vahel
+        reactOnClick1 ();       // Programm joonistab graafiku vastavalt kasutaja valikule
 
 }
 
@@ -49,6 +44,7 @@ public class UserInterface {
         grid.add(name1, 1, 0);
         cb = new ChoiceBox(FXCollections.observableArrayList("Whole Estonia","Only Tallinn"));
         grid.add(cb, 4, 0);
+        cb.setValue("Whole Estonia");
 
         button1 = new Button();
         button1.setText("Chart on Prices!");
@@ -57,7 +53,9 @@ public class UserInterface {
         button2 = new Button();
         button2.setText("Chart on Transaction Volumes!");
         grid.add(button2, 4, 2);
-}
+    }
+
+    //Piirkonna valiku muutusele reageerimine
     public void Selection() {
         cb.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             area = (String) newValue;
@@ -65,61 +63,33 @@ public class UserInterface {
         });
 
     }
+    // Programm joonistab valitud graafiku
     public void reactOnClick1() {
-        String prices1 = "Chart on Prices!";
-        String prices2 = "Chart on Prices!";
-        String transactions1 = "Chart on Transaction Volumes!";
-        String transactions2 = "Chart on Transaction Volumes!";
-
-
-
+        // kui tahetakse, et programm väljastaks hinnakasvu graafiku
         button1.setOnAction(event -> {
-            if (button1.getText().toString().equals(prices1)){
-                String selection= cb.getValue().toString();
+                String selection= cb.getValue().toString(); //salvestab valitud piirkonna muutujasse
                 Database a = new Database();
-                selectedData= a.getSelectedData(selection);
+                selectedData= a.getSelectedData(selection); //küsib andmebaasist valitud piirkonna andmed
                 DataChart priceschart=new DataChart();
+                // Põhinedes valikutele, mille alusel tehti SQL-i andmebaasist päring, joonistab programm graafiku
                 priceschart.drawChart(selectedData);
                 a.clearDatabase();
                 a.closeConnection();
-            }
-            else {
-                String selection= cb.getValue().toString();
-                Database a = new Database();
-                selectedData= a.getSelectedData(selection);
-                DataChart priceschart=new DataChart();
-                priceschart.drawChart(selectedData);
-                a.clearDatabase();
-                a.closeConnection();
-            }
-
         });
-
+        // kui tahetakse, et programm väljastaks tehingumahtude graafiku
         button2.setOnAction(event -> {
-            if (button2.getText().toString().equals(transactions1)){
-                String selection= cb.getValue().toString();
+                String selection= cb.getValue().toString(); //salvestab valitud piirkonna muutujasse
                 Database a = new Database();
-                selectedData= a.getSelectedData3(selection);
+                selectedData= a.getSelectedData3(selection); //küsib andmebaasist valitud piirkonna andmed
                 DataChart priceschart=new DataChart();
-                priceschart.drawChart(selectedData);
+                 // Põhinedes valikutele, mille alusel tehti SQL-i andmebaasist päring, joonistab programm graafiku
+                priceschart.drawChart2(selectedData);
                 a.clearDatabase();
                 a.closeConnection();
-            }
-            else {
-                String selection= cb.getValue().toString();
-                Database a = new Database();
-                selectedData= a.getSelectedData3(selection);
-                DataChart priceschart=new DataChart();
-                priceschart.drawChart(selectedData);
-                a.clearDatabase();
-                a.closeConnection();
-            }
+
 
         });
-
-
 }
-
         }
 
 
