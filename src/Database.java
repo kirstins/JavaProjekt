@@ -132,25 +132,7 @@ public class Database {
     }
     return selectedData;}
 
-    public Map<Integer, Double> getSelectedData2 (String region2){
-        Map<Integer, Double> selectedData = new HashMap<>();
-        try {
-            Statement stat = conn.createStatement();
-
-            String sql = "SELECT YEAR, PRICES FROM PRICESANDTRANSACTIONS WHERE REGION = ('" +region2+ "') ORDER BY YEAR";
-            ResultSet rs = stat.executeQuery(sql);
-
-            while (rs.next()){
-                Integer year= rs.getInt("YEAR");
-                Double Prices = rs.getDouble("PRICES");
-                selectedData.put(year,Prices);
-                System.out.println(selectedData);
-
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        return selectedData;}
+   
 
     public Map<Integer, Double> getSelectedData3 (String region3){
         Map<Integer, Double> selectedData = new HashMap<>();
@@ -172,25 +154,7 @@ public class Database {
         }
         return selectedData;}
 
-    public Map<Integer, Double> getSelectedData4 (String region4){
-        Map<Integer, Double> selectedData = new HashMap<>();
-        try {
-            Statement stat = conn.createStatement();
 
-            String sql = "SELECT YEAR, TRANSACTIONS FROM PRICESANDTRANSACTIONS WHERE REGION = ('" +region4+ "') ORDER BY YEAR";
-            ResultSet rs = stat.executeQuery(sql);
-
-            while (rs.next()){
-                Integer year= rs.getInt("YEAR");
-                Double Transactions = rs.getDouble("TRANSACTIONS");
-                selectedData.put(year,Transactions);
-                System.out.println(selectedData);
-
-            }
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        return selectedData;}
 
 
     public void clearDatabase() {
